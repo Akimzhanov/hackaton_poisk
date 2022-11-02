@@ -1,5 +1,5 @@
-# Created by https://www.toptal.com/developers/gitignore/api/visualstudiocode,django,venv,python
-# Edit at https://www.toptal.com/developers/gitignore?templates=visualstudiocode,django,venv,python
+# Created by https://www.toptal.com/developers/gitignore/api/python,django,visualstudiocode,venv
+# Edit at https://www.toptal.com/developers/gitignore?templates=python,django,visualstudiocode,venv
 
 ### Django ###
 *.log
@@ -284,6 +284,4 @@ pip-selfcheck.json
 .history
 .ionide
 
-# End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,django,venv,python\
-
-.roomid
+# End of https://www.toptal.com/developers/gitignore/api/python,django,visualstudiocode,venv

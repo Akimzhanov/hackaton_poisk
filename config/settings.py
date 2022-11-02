@@ -9,9 +9,10 @@ https://docs.djangoproject.com/en/4.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
-
+from datetime import timedelta
 from pathlib import Path
 from decouple import config
+import os
 
 
 
@@ -40,6 +41,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_celery_results',
+
+
+    'rest_framework',
+    'drf_yasg',
+    
+
+    'apps.account',
+
 ]
 
 MIDDLEWARE = [
@@ -123,8 +133,40 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+MEDIA_URL = 'media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+EMAIL_BACKENDS = 'django.core.mail.backends.smtp.EmailBackend' # класс отвечающий за отправку писем
+EMAIL_HOST_USER = config('EMAIL_HOST_USER') # почта с которой отправляются письма
+EMAIL_PORT = config('EMAIL_PORT', default=587)
+EMAIL_HOST = config('EMAIL_HOST') # какой хост используется для отправки писем
+EMAIL_HOST_PASSWORD = config('EMAIL_PASSWORD') # пароль от почты
+EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool) # вид соединения для отправки писем
+
+AUTH_USER_MODEL = 'account.User'
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=180),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'USER_ID_FIELD': 'username',
+    'AUTH_HEADER_TYPES': ('Bearer', 'Token'),
+}
+
+
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379/0'
+CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379/0'

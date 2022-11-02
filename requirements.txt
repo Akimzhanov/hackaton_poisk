@@ -10,3 +10,4 @@ psycopg2-binary
 python-slugify  #для слагов
 celery  #для быстрой отправки всего 
 redis
+django-celery-results
