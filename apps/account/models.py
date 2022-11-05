@@ -60,6 +60,15 @@ class User(AbstractBaseUser):
         self.activation_code = code 
         self.save()
 
+    def create_activation_code(self):
+        code = get_random_string(length=8)
+        if User.objects.filter(activation_code=code).exists():
+            self.create_activation_code()
+        self.activation_code = code
+        self.save()
+
+
+
 
     class Meta:
         verbose_name = 'User'

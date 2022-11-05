@@ -18,3 +18,12 @@ def send_activation_code(email, activation_code):
         html_message=html_message,
         fail_silently=False
     )
+
+# def send_activation_code(email, code):
+#     full_link = f'http:127.0.0.1:8000/accounts/activate/{code}/'
+#     send_mail(
+#         'Здравствуйте активируйте ваш аккаунт!',
+#         f'Чтобы активировать ваш аккаунт нужно перейти по ссылке: {full_link}', 'kurmanjan25nurbekova@gmail.com',
+#         [email],
+#         fail_silently=False
+    # )

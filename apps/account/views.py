@@ -2,12 +2,19 @@ from rest_framework.views import APIView
 from django.contrib.auth import get_user_model
 from rest_framework.request import Request
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, permissions
 from drf_yasg.utils import swagger_auto_schema
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.authtoken.models import Token
 
 
 from .serializers import(
-    UserRegistrationSerializer
+    UserRegistrationSerializer,
+    PasswordChangeSerializer,
+    RestorePasswordSerializer,
+    SetRestoredPasswordSerializer
+
 )
 
 User = get_user_model()
@@ -41,11 +48,60 @@ class AccountActivationView(APIView):
             )
 
 
+class LogoutView(APIView): # TODO  TODO  TODO  TODO  TODO  TODO  TODO  TODO  TODO  TODO  TODO TODO  TODO  TODO  TODO TODO TODO TODO TODO TODO TODO 
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request: Request):
+        user = request.user
+        Token.objects.filter(user=user).delete()
+        return Response(
+            'Вы вышли из учетной записи. До свидания!',
+            status=status.HTTP_200_OK
+        )
 
 
+class ChangePasswordView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request: Request):
+        serializer = PasswordChangeSerializer(data=request.data, context={'request': request})
+        if serializer.is_valid(raise_exception=True):
+            serializer.set_new_password()
+            return Response(
+                'Password changed succesfully.',
+                status=status.HTTP_200_OK
+            )
 
 
+class RestorePasswordView(APIView):
+    def post(self, request: Request):
+        serializer = RestorePasswordSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.send_code()
+            return Response(
+                'Code was sent to your email',
+                status=status.HTTP_200_OK
+            )
 
 
+class SetRestoredPasswordView(APIView):
+    def post(self, request: Request):
+        serializer = SetRestoredPasswordSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.set_new_password()
+            return Response(
+                'Password restored successfully',
+                status=status.HTTP_200_OK
+            )
 
 
+class DeleteAccountView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request: Request):
+        username = request.user.username
+        User.objects.filter(username=username).delete()
+        return Response(
+            'Account deleted succsessfully',
+            status=status.HTTP_204_NO_CONTENT
+        )
