@@ -23,7 +23,7 @@ from django.conf import settings
 
 schema_view = get_schema_view(
    openapi.Info(
-      title="Snippets API",
+      title="Poisk API",
       default_version='v1',
       description="Test description",
       terms_of_service="https://www.google.com/policies/terms/",
@@ -38,7 +38,8 @@ urlpatterns = [
     path('', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('admin/', admin.site.urls),
     path('account/', include('apps.account.urls')),
-    path('public/', include('apps.post.urls'))
+    path('public/', include('apps.post.urls')),
+    path('public/',include('apps.find.urls'))
 ]
 
 if settings.DEBUG:
