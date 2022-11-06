@@ -1,3 +1,8 @@
 from django.contrib import admin
+from .models import Lost, LostImage
 
-# Register your models here.
+
+
+admin.site.register([Lost, LostImage])
+
+
